@@ -134,6 +134,12 @@ label {
   color: var(--text);
 }
 
+.hint {
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--muted);
+}
+
 input,
 textarea,
 select {

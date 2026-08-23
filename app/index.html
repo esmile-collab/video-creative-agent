@@ -18,11 +18,11 @@
         </div>
 
         <div class="sidebar-card">
-          <h2>生成要求</h2>
+          <h2>怎么写效果好</h2>
           <ul>
-            <li>Brief 与事实边界清晰</li>
-            <li>限制输出时长与禁止项</li>
-            <li>生成后自动进入分镜校验</li>
+            <li>说清楚这条视频拍给谁看</li>
+            <li>卖点和事实尽量具体，每行一条</li>
+            <li>生成后会自动检查结构是否可用</li>
           </ul>
         </div>
       </aside>
@@ -40,52 +40,49 @@
           <div class="form-grid">
             <label>
               <span>项目标题</span>
-              <input name="title" value="AI 工作流入门" required />
+              <input name="title" placeholder="例如：AI 工作流入门" required />
             </label>
             <label>
               <span>脚本类型</span>
               <select name="scriptType">
-                <option value="knowledge_explainer" selected>knowledge_explainer</option>
-                <option value="product_education">product_education</option>
-                <option value="case_breakdown">case_breakdown</option>
+                <option value="knowledge_explainer" selected>知识讲解</option>
+                <option value="product_education">产品种草</option>
+                <option value="case_breakdown">案例拆解</option>
               </select>
             </label>
           </div>
 
           <label>
             <span>目标受众</span>
-            <textarea name="audience" rows="3" required>刚接触 AI 的非技术创作者</textarea>
+            <textarea name="audience" rows="2" placeholder="这条视频拍给谁看？例如：刚接触 AI 的非技术创作者" required></textarea>
           </label>
 
           <label>
-            <span>内容目标</span>
-            <textarea name="goal" rows="3" required>解释一个最小可验证的视频工作流，并给出当天可以完成的最小行动。</textarea>
+            <span>核心产品</span>
+            <input name="product" placeholder="这条视频围绕的产品或服务是什么？" required />
           </label>
 
           <label>
-            <span>确认事实（每行一条）</span>
-            <textarea name="confirmedFacts" rows="5">一个最小视频工作流可以拆成 Brief、脚本、确认脚本、分镜和校验五个阶段。
-确认脚本进入分镜阶段后应冻结原文，分镜只增加画面说明。
-自动校验可以检查结构完整性，最终画面质量仍需人工确认。</textarea>
+            <span>产品卖点</span>
+            <span class="hint">最想让观众记住的亮点，每行一条</span>
+            <textarea name="sellingPoints" rows="3" placeholder="例如：无需 API Key，本地就能跑通完整流程"></textarea>
           </label>
 
           <label>
-            <span>创作许可（每行一条）</span>
-            <textarea name="creativePermissions" rows="4">可以使用日常创作场景和第二人称提问。
-可以用“先跑通一条，再逐步替换模块”的教学顺序。</textarea>
+            <span>核心事实</span>
+            <span class="hint">关于产品可以确定的事实依据（功能、参数、真实信息），每行一条，脚本只会在这些事实范围内展开</span>
+            <textarea name="coreFacts" rows="4" placeholder="例如：整个流程分为写需求、生成脚本、生成分镜、自动校验四个步骤"></textarea>
           </label>
 
           <label>
-            <span>禁止项（每行一条）</span>
-            <textarea name="forbiddenClaims" rows="4">不承诺收入、流量、转化或效率提升比例。
-不虚构用户证言、机构背书、平台能力和实测数据。</textarea>
+            <span>想表达的内容</span>
+            <textarea name="keyMessage" rows="3" placeholder="这条视频最想传达什么？希望观众看完明白什么、去做什么？" required></textarea>
           </label>
 
           <label>
-            <span>交付要求（每行一条）</span>
-            <textarea name="deliveryRequirements" rows="4">口语化中文，控制在 60 至 90 秒。
-开头直接提出受众常见误区。
-结尾给出一个当天可以完成的最小行动。</textarea>
+            <span>不能说的内容（可选）</span>
+            <span class="hint">不希望脚本里出现的说法，每行一条</span>
+            <textarea name="forbiddenClaims" rows="3" placeholder="例如：不承诺收入、流量等效果数字"></textarea>
           </label>
 
           <div class="actions">

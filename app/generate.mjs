@@ -20,37 +20,55 @@ function normalizeList(list) {
   return [];
 }
 
-export function buildBrief(input = {}) {
-  const title = String(input.title || "AI 视频脚本生成").trim();
-  const scriptType = String(input.scriptType || "knowledge_explainer").trim();
-  const audience = String(input.audience || "会使用对话模型但没有工程背景的创作者").trim();
-  const goal = String(input.goal || "解释一个可验证的最小视频工作流").trim();
+const DEFAULT_FORBIDDEN_CLAIMS = [
+  "不承诺收入、流量、转化或效率提升比例。",
+  "不虚构用户证言、机构背书、平台能力和实测数据。",
+];
 
-  const confirmedFacts = normalizeList(input.confirmedFacts);
-  const creativePermissions = normalizeList(input.creativePermissions);
+const DEFAULT_DELIVERY = [
+  "口语化中文，控制在 60 至 90 秒。",
+  "开头直接提出受众常见误区。",
+  "结尾给出一个当天可以完成的最小行动。",
+];
+
+export function buildBrief(input = {}) {
+  const title = String(input.title || "未命名项目").trim();
+  const scriptType = String(input.scriptType || "knowledge_explainer").trim();
+  const audience = String(input.audience || "对主题感兴趣的普通观众").trim();
+  const product = String(input.product || "").trim();
+  const keyMessage = String(input.keyMessage || input.goal || "讲清楚核心内容，并给出一个可执行的行动").trim();
+
+  // 用户填写的核心事实与产品卖点都属于"已确认的事实边界"
+  const confirmedFacts = [
+    ...normalizeList(input.coreFacts ?? input.confirmedFacts),
+    ...normalizeList(input.sellingPoints),
+  ];
   const forbiddenClaims = normalizeList(input.forbiddenClaims);
-  const deliveryRequirements = normalizeList(input.deliveryRequirements);
 
   return [
     `# ${title}`,
     "",
     "## goal（目标）",
-    `"${scriptType}" 类型脚本，目标：${goal}`,
+    product
+      ? `"${scriptType}" 类型脚本，围绕「${product}」：${keyMessage}`
+      : `"${scriptType}" 类型脚本，目标：${keyMessage}`,
     "",
     "## audience（受众）",
     `- ${audience}`,
     "",
     "## confirmed_facts（确认事实）",
-    confirmedFacts.length > 0 ? confirmedFacts.map((fact) => `- ${fact}`).join("\n") : "- 一个最小视频工作流可以拆成 Brief、脚本、确认脚本、分镜和校验五个阶段。",
+    confirmedFacts.length > 0
+      ? confirmedFacts.map((fact) => `- ${fact}`).join("\n")
+      : `- ${product ? `脚本围绕「${product}」展开。` : "脚本只围绕用户提供的主题展开，不添加未经确认的信息。"}`,
     "",
     "## creative_permissions（创作许可）",
-    creativePermissions.length > 0 ? creativePermissions.map((item) => `- ${item}`).join("\n") : "- 可以使用日常创作场景和第二人称提问。",
+    "- 可以围绕用户提供的产品、卖点与表达重点展开，使用日常场景和第二人称提问。",
     "",
     "## forbidden_claims（禁止项）",
-    forbiddenClaims.length > 0 ? forbiddenClaims.map((item) => `- ${item}`).join("\n") : "- 不虚构用户证言、机构背书、平台能力和实测数据。",
+    (forbiddenClaims.length > 0 ? forbiddenClaims : DEFAULT_FORBIDDEN_CLAIMS).map((item) => `- ${item}`).join("\n"),
     "",
     "## delivery（交付要求）",
-    deliveryRequirements.length > 0 ? deliveryRequirements.map((item) => `- ${item}`).join("\n") : "- 口语化中文，控制在 60 至 90 秒。",
+    DEFAULT_DELIVERY.map((item) => `- ${item}`).join("\n"),
     "",
   ].join("\n");
 }
@@ -65,15 +83,16 @@ export async function generateScriptFromBrief(input = {}) {
 
   const brief = buildBrief(input);
   const scriptType = String(input.scriptType || "knowledge_explainer").trim();
-  const audience = String(input.audience || "会使用对话模型但没有工程背景的创作者").trim();
-  const goal = String(input.goal || "解释一个可验证的最小视频工作流").trim();
+  const audience = String(input.audience || "对主题感兴趣的普通观众").trim();
+  const product = String(input.product || "").trim();
+  const keyMessage = String(input.keyMessage || input.goal || "讲清楚核心内容，并给出一个可执行的行动").trim();
 
   const retrieval = retrieveStrategy(cards, {
     query: {
       audience_situations: [audience],
       problem_patterns: [String(input.problemPattern || "把单次生成当成稳定系统").trim() || "把单次生成当成稳定系统"],
-      content_goals: [goal, "给出可执行动作"],
-      product_tasks: [scriptType, "知识讲解"],
+      content_goals: [keyMessage, "给出可执行动作"],
+      product_tasks: [scriptType, product || "知识讲解"],
       available_inputs: ["confirmed_facts", "forbidden_claims", "creative_permissions"],
     },
     scriptType,

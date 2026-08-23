@@ -1,0 +1,8 @@
+{
+  "audience_situations": ["没有工程背景的 AI 初学者", "想把一次生成变成稳定工作流"],
+  "problem_patterns": ["不知道视频 Agent 应该拆成哪些阶段", "缺少可验证的完成标准"],
+  "content_goals": ["解释最小视频工作流", "给出当天可执行的起步动作"],
+  "product_tasks": ["知识讲解", "新手教学"],
+  "available_inputs": ["confirmed_facts", "creative_permissions", "forbidden_claims"],
+  "active_exclusion_ids": []
+}

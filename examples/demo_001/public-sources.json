@@ -1,0 +1,32 @@
+[
+  {
+    "source_id": "public_video_ai_engineer",
+    "platform": "bilibili",
+    "public_video_id": "BV1rPDkB7ESC",
+    "title": "如何成为 AI 工程师？你必需要掌握的三大核心技术是什么？",
+    "public_url": "https://www.bilibili.com/video/BV1rPDkB7ESC",
+    "media_mode": "external_reference",
+    "local_media_included": false,
+    "rights_note": "仅记录公开页面引用；仓库不包含视频、音频、字幕或抽帧。"
+  },
+  {
+    "source_id": "public_video_agent_harness",
+    "platform": "bilibili",
+    "public_video_id": "BV1ypdgBCE9B",
+    "title": "Harness 实践：让 Agent 全自动制作知识讲解视频",
+    "public_url": "https://www.bilibili.com/video/BV1ypdgBCE9B",
+    "media_mode": "external_reference",
+    "local_media_included": false,
+    "rights_note": "仅记录公开页面引用；仓库不包含视频、音频、字幕或抽帧。"
+  },
+  {
+    "source_id": "public_video_ai_soft_skills",
+    "platform": "bilibili",
+    "public_video_id": "BV1UdK463E2E",
+    "title": "只是会用AI就太菜了，雇主最看重的5个软实力其实是",
+    "public_url": "https://www.bilibili.com/video/BV1UdK463E2E",
+    "media_mode": "external_reference",
+    "local_media_included": false,
+    "rights_note": "仅记录公开页面引用；仓库不包含视频、音频、字幕或抽帧。"
+  }
+]

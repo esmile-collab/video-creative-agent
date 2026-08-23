@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "storyboard.schema.json",
+  "title": "公开分镜",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "script_sha256", "estimated_total_duration_sec", "segments"],
+  "properties": {
+    "schema_version": { "const": "storyboard_v1" },
+    "script_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "estimated_total_duration_sec": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "segments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "segment_id",
+          "start_sec",
+          "end_sec",
+          "asr_text",
+          "visual_type",
+          "caption"
+        ],
+        "properties": {
+          "segment_id": { "type": "string", "pattern": "^S[0-9]{3,}$" },
+          "start_sec": { "type": "integer", "minimum": 0 },
+          "end_sec": { "type": "integer", "minimum": 1 },
+          "asr_text": { "type": "string", "minLength": 1 },
+          "visual_type": {
+            "enum": ["digital_human", "ai_visual", "explanatory_graphic", "user_asset"]
+          },
+          "caption": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}
+

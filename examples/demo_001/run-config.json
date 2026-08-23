@@ -1,0 +1,17 @@
+{
+  "run_id": "public_demo_001",
+  "script_type": "knowledge_explainer",
+  "brief_path": "brief.md",
+  "query_path": "retrieval-query.json",
+  "base_skill_path": "base-skill.md",
+  "cards_path": "strategy-cards.json",
+  "mock_script_path": "approved-script.txt",
+  "public_sources_path": "public-sources.json",
+  "retrieval_threshold": 0.2,
+  "allow_fallback": true,
+  "output_contract": {
+    "language": "zh-CN",
+    "duration_seconds": [60, 90],
+    "format": "plain_text"
+  }
+}

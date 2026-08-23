@@ -1,0 +1,122 @@
+[
+  {
+    "strategy_card_schema_version": "strategy_card_v1",
+    "strategy_card_id": "knowledge_workflow_minimum_loop",
+    "strategy_card_version": "1.0.0",
+    "script_type": "knowledge_explainer",
+    "status": "published",
+    "strategy_name": "误区切入的最小闭环讲解",
+    "strategy_summary": "先纠正常见误区，再用可检查的阶段拆解复杂工作流，最后给出最小行动。",
+    "retrieval_view": {
+      "audience_situations": ["没有工程背景的 AI 初学者", "会使用工具但缺少工作流"],
+      "problem_patterns": ["把单次生成当成稳定系统", "不知道复杂任务如何拆阶段", "缺少验证标准"],
+      "content_goals": ["解释最小工作流", "降低起步门槛", "给出可执行动作"],
+      "product_tasks": ["知识讲解", "新手教学"],
+      "required_inputs": ["confirmed_facts", "forbidden_claims"],
+      "exclusion_conditions": [
+        {
+          "condition_id": "requires_real_testimonial",
+          "description": "任务必须依赖真实用户证言时不使用。"
+        }
+      ]
+    },
+    "generation_view": {
+      "opening_strategy": {
+        "pattern": "先指出受众当前做法中可观察的误区",
+        "constraint": "不夸大后果"
+      },
+      "attention_to_product": {
+        "pattern": "在问题成立后再引入工作流",
+        "constraint": "产品或方法不抢占开头"
+      },
+      "semantic_structure": [
+        { "section": "misconception", "purpose": "指出一次生成与稳定工作流的差别" },
+        { "section": "minimum_loop", "purpose": "按输入、确认、输出和校验拆解阶段" },
+        { "section": "boundary", "purpose": "说明自动校验与人工确认的边界" },
+        { "section": "action", "purpose": "给出当天可完成的最小动作" }
+      ],
+      "mechanism_pattern": {
+        "type": "stage_decomposition",
+        "description": "每一阶段都说明输入、输出和检查条件。"
+      },
+      "narrator_profile": {
+        "dramatization_permission": "可模拟普通创作者面对空白工作区的日常情境，不虚构真实经历。",
+        "core_fact_boundary": "只迁移叙事结构；当前事实全部来自本次 Brief（任务简报）。"
+      },
+      "language_style": {
+        "tone": "直接、平实、可执行",
+        "sentence": "短句优先，避免堆叠术语"
+      }
+    },
+    "transfer_boundary": {
+      "allowed": ["误区切入", "阶段拆解", "最小行动"],
+      "forbidden": ["来源视频的具体事实", "完整字幕", "效果数据", "真实证言"]
+    },
+    "source_refs": [
+      {
+        "source_id": "public_video_agent_harness",
+        "evidence_note": "公开页面仅用于说明知识工作流这一内容类型；策略卡文字为本项目重新抽象。"
+      },
+      {
+        "source_id": "public_video_ai_engineer",
+        "evidence_note": "公开页面仅用于说明面向初学者的分层讲解场景；不复用来源字幕。"
+      }
+    ]
+  },
+  {
+    "strategy_card_schema_version": "strategy_card_v1",
+    "strategy_card_id": "career_capability_checklist",
+    "strategy_card_version": "1.0.0",
+    "script_type": "knowledge_explainer",
+    "status": "published",
+    "strategy_name": "能力清单与自查",
+    "strategy_summary": "用能力清单帮助求职者自查当前缺口。",
+    "retrieval_view": {
+      "audience_situations": ["准备 AI 岗位面试", "需要整理求职能力"],
+      "problem_patterns": ["只会罗列工具", "不知道如何证明能力"],
+      "content_goals": ["形成能力清单", "准备能力证据"],
+      "product_tasks": ["求职建议", "能力盘点"],
+      "required_inputs": ["confirmed_facts", "creative_permissions"],
+      "exclusion_conditions": [
+        {
+          "condition_id": "not_career_topic",
+          "description": "当前任务不涉及求职或能力盘点时不使用。"
+        }
+      ]
+    },
+    "generation_view": {
+      "opening_strategy": {
+        "pattern": "用一条自查问题进入主题"
+      },
+      "attention_to_product": {
+        "pattern": "围绕能力证据组织内容"
+      },
+      "semantic_structure": [
+        { "section": "question", "purpose": "提出自查问题" },
+        { "section": "checklist", "purpose": "给出能力清单" },
+        { "section": "evidence", "purpose": "说明如何准备证据" }
+      ],
+      "mechanism_pattern": {
+        "type": "checklist",
+        "description": "按能力项逐条检查。"
+      },
+      "narrator_profile": {
+        "dramatization_permission": "可以使用匿名求职场景，不虚构结果。",
+        "core_fact_boundary": "能力项和要求只来自本次 Brief（任务简报）。"
+      },
+      "language_style": {
+        "tone": "清楚、克制"
+      }
+    },
+    "transfer_boundary": {
+      "allowed": ["自查提问", "清单结构"],
+      "forbidden": ["招聘方结论", "未经确认的岗位要求", "来源字幕", "业务数据"]
+    },
+    "source_refs": [
+      {
+        "source_id": "public_video_ai_soft_skills",
+        "evidence_note": "公开页面仅用于说明求职能力讲解这一内容类型；不复用来源字幕。"
+      }
+    ]
+  }
+]

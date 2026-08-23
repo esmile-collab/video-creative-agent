@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "run-config.schema.json",
+  "title": "Demo 运行配置",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "script_type",
+    "brief_path",
+    "query_path",
+    "base_skill_path",
+    "cards_path",
+    "mock_script_path",
+    "public_sources_path",
+    "retrieval_threshold",
+    "allow_fallback"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "pattern": "^[A-Za-z0-9._-]+$" },
+    "script_type": { "type": "string", "minLength": 1 },
+    "brief_path": { "type": "string", "minLength": 1 },
+    "query_path": { "type": "string", "minLength": 1 },
+    "base_skill_path": { "type": "string", "minLength": 1 },
+    "cards_path": { "type": "string", "minLength": 1 },
+    "mock_script_path": { "type": "string", "minLength": 1 },
+    "public_sources_path": { "type": "string", "minLength": 1 },
+    "retrieval_threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+    "allow_fallback": { "type": "boolean" },
+    "output_contract": { "type": "object" }
+  }
+}

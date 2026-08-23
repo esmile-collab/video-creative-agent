@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "public-source.schema.json",
+  "title": "公开来源引用",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source_id",
+    "platform",
+    "public_video_id",
+    "title",
+    "public_url",
+    "media_mode",
+    "local_media_included"
+  ],
+  "properties": {
+    "source_id": { "type": "string", "minLength": 1 },
+    "platform": { "type": "string", "minLength": 1 },
+    "public_video_id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "public_url": { "type": "string", "format": "uri" },
+    "media_mode": { "const": "external_reference" },
+    "local_media_included": { "const": false },
+    "rights_note": { "type": "string" }
+  }
+}
+

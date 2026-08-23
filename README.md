@@ -29,6 +29,16 @@ npm run safety
 
 Demo 输出写入 `outputs/demo_001/`，该目录默认不进入 Git。
 
+## 脚本生成 Web 界面
+
+```bash
+npm start
+```
+
+打开 http://localhost:4173 （可用 `PORT` 环境变量修改端口），在表单中填写标题、脚本类型、受众、目标、确认事实、创作许可、禁止项和交付要求，点击「生成脚本」即可得到脚本正文、分镜概览与结构门禁结果。界面默认使用 Mock Provider，无需 API Key；「填充示例」按钮可一键填入 `examples/demo_001/` 的演示内容。
+
+界面由 `app/` 目录承载：静态页面与交互（`index.html`、`styles.css`、`app.js`）、零依赖 Node HTTP 服务（`server.mjs`，暴露 `POST /api/generate` 与 `GET /health`）、以及复用核心管线的生成逻辑（`generate.mjs`）。
+
 ## 真实公开视频 Demo
 
 `examples/demo_001/public-sources.json` 保存三个 C 端可访问的视频 URL（链接）、视频 ID 和标题，用于说明策略来源与外部参考关系。
@@ -42,6 +52,7 @@ core/strategy/       策略卡校验、召回与脚本请求编译
 core/storyboard/     脚本切分、画面规划与分镜渲染
 core/evaluation/     结构门禁与切点评测
 core/providers/      Mock 与兼容模型适配器
+app/                 脚本生成 Web 界面（表单、静态服务与生成 API）
 contracts/           可公开的数据契约
 examples/demo_001/   无内部业务数据的演示输入
 scripts/             Demo、脱敏扫描和验证入口

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Creative Agent</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <div class="brand-badge">VCA</div>
+          <div>
+            <p class="eyebrow">脚本生成工作台</p>
+            <h1>Video Creative Agent</h1>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h2>生成要求</h2>
+          <ul>
+            <li>Brief 与事实边界清晰</li>
+            <li>限制输出时长与禁止项</li>
+            <li>生成后自动进入分镜校验</li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">公开版演示</p>
+            <h2>脚本生成</h2>
+          </div>
+          <button id="use-demo" class="secondary-button" type="button">填充示例</button>
+        </header>
+
+        <form id="brief-form" class="brief-form">
+          <div class="form-grid">
+            <label>
+              <span>项目标题</span>
+              <input name="title" value="AI 工作流入门" required />
+            </label>
+            <label>
+              <span>脚本类型</span>
+              <select name="scriptType">
+                <option value="knowledge_explainer" selected>knowledge_explainer</option>
+                <option value="product_education">product_education</option>
+                <option value="case_breakdown">case_breakdown</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            <span>目标受众</span>
+            <textarea name="audience" rows="3" required>刚接触 AI 的非技术创作者</textarea>
+          </label>
+
+          <label>
+            <span>内容目标</span>
+            <textarea name="goal" rows="3" required>解释一个最小可验证的视频工作流，并给出当天可以完成的最小行动。</textarea>
+          </label>
+
+          <label>
+            <span>确认事实（每行一条）</span>
+            <textarea name="confirmedFacts" rows="5">一个最小视频工作流可以拆成 Brief、脚本、确认脚本、分镜和校验五个阶段。
+确认脚本进入分镜阶段后应冻结原文，分镜只增加画面说明。
+自动校验可以检查结构完整性，最终画面质量仍需人工确认。</textarea>
+          </label>
+
+          <label>
+            <span>创作许可（每行一条）</span>
+            <textarea name="creativePermissions" rows="4">可以使用日常创作场景和第二人称提问。
+可以用“先跑通一条，再逐步替换模块”的教学顺序。</textarea>
+          </label>
+
+          <label>
+            <span>禁止项（每行一条）</span>
+            <textarea name="forbiddenClaims" rows="4">不承诺收入、流量、转化或效率提升比例。
+不虚构用户证言、机构背书、平台能力和实测数据。</textarea>
+          </label>
+
+          <label>
+            <span>交付要求（每行一条）</span>
+            <textarea name="deliveryRequirements" rows="4">口语化中文，控制在 60 至 90 秒。
+开头直接提出受众常见误区。
+结尾给出一个当天可以完成的最小行动。</textarea>
+          </label>
+
+          <div class="actions">
+            <button type="submit" class="primary-button">生成脚本</button>
+            <button type="button" class="ghost-button" id="reset-form">清空</button>
+          </div>
+        </form>
+
+        <section id="result-panel" class="result-panel hidden">
+          <div class="result-header">
+            <div>
+              <p class="eyebrow">生成结果</p>
+              <h3>脚本与分镜</h3>
+            </div>
+            <div id="status-tag" class="status-tag">生成中</div>
+          </div>
+
+          <div class="summary-grid" id="summary-grid"></div>
+
+          <div class="output-card">
+            <h4>脚本正文</h4>
+            <pre id="script-output"></pre>
+          </div>
+
+          <div class="output-card">
+            <h4>分镜概览</h4>
+            <pre id="storyboard-output"></pre>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

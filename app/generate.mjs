@@ -73,7 +73,7 @@ export function buildBrief(input = {}) {
   ].join("\n");
 }
 
-export async function generateScriptFromBrief(input = {}) {
+export async function generateScript(input = {}) {
   const [cards, baseSkill, approvedScript, publicSources] = await Promise.all([
     readJson(path.join(exampleDirectory, "strategy-cards.json")),
     readFile(path.join(exampleDirectory, "base-skill.md"), "utf8"),
@@ -114,31 +114,50 @@ export async function generateScriptFromBrief(input = {}) {
 
   const provider = createMockProvider(approvedScript);
   const generated = await provider.generateScript(compiledRequest);
-  const { storyboard, validation } = buildStoryboard(generated.content);
-  const evaluation = evaluateStoryboard({ storyboard, approvedScript: generated.content });
-
-  const summary = {
-    run_id: compiledRequest.metadata.run_id,
-    provider_id: provider.provider_id,
-    model_id: provider.model_id,
-    selected_strategy_card_id: retrieval.selected_strategy_card_id,
-    retrieval_fallback: retrieval.fallback,
-    segment_count: storyboard.segments.length,
-    estimated_total_duration_sec: storyboard.estimated_total_duration_sec,
-    release_decision: evaluation.release_decision,
-    blocking_ok: validation.blocking_ok,
-    public_source_count: publicSources.length,
-  };
 
   return {
     brief,
-    compiledRequest,
     script: generated.content.trim(),
     retrieval,
+    summary: {
+      run_id: compiledRequest.metadata.run_id,
+      provider_id: provider.provider_id,
+      model_id: provider.model_id,
+      selected_strategy_card_id: retrieval.selected_strategy_card_id,
+      retrieval_fallback: retrieval.fallback,
+      script_characters: generated.content.trim().length,
+      public_source_count: publicSources.length,
+    },
+  };
+}
+
+function clampNumber(value, min, max, fallback) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return fallback;
+  return Math.min(max, Math.max(min, number));
+}
+
+export function generateStoryboard(script, options = {}) {
+  const confirmedScript = String(script || "").trim();
+  if (!confirmedScript) throw new Error("script_required");
+
+  const { storyboard, validation } = buildStoryboard(confirmedScript, {
+    charactersPerSecond: clampNumber(options.charactersPerSecond, 3, 10, 5.97),
+    maximumCharacters: clampNumber(options.maximumCharacters, 10, 120, 42),
+  });
+  const evaluation = evaluateStoryboard({ storyboard, approvedScript: confirmedScript });
+
+  return {
     storyboard,
     validation,
     evaluation,
-    summary,
     storyboardMarkdown: renderStoryboardMarkdown(storyboard, "生成结果分镜"),
+    summary: {
+      segment_count: storyboard.segments.length,
+      estimated_total_duration_sec: storyboard.estimated_total_duration_sec,
+      release_decision: evaluation.release_decision,
+      blocking_ok: validation.blocking_ok,
+      warning_count: validation.warnings.length,
+    },
   };
 }

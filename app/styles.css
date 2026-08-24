@@ -233,27 +233,6 @@ button:hover {
   font-size: 1rem;
 }
 
-.output-card {
-  background: #f9fbff;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px;
-  margin-top: 14px;
-}
-
-.output-card h4 {
-  margin-top: 0;
-}
-
-pre {
-  white-space: pre-wrap;
-  word-break: break-word;
-  font-family: "SFMono-Regular", ui-monospace, monospace;
-  font-size: 0.95rem;
-  line-height: 1.7;
-  margin: 0;
-}
-
 .status-tag {
   padding: 8px 12px;
   border-radius: 999px;
@@ -270,6 +249,105 @@ pre {
 .status-tag.warning {
   background: rgba(217, 130, 43, 0.12);
   color: var(--warning);
+}
+
+.panel-desc {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.script-editor {
+  width: 100%;
+  margin-top: 4px;
+  font-size: 1rem;
+  line-height: 1.9;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: #fbfcff;
+}
+
+.result-panel .actions {
+  margin-top: 14px;
+}
+
+.storyboard-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.storyboard-controls label {
+  width: 160px;
+  font-size: 0.85rem;
+}
+
+.storyboard-controls input {
+  padding: 9px 12px;
+}
+
+.storyboard-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.storyboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  min-width: 900px;
+}
+
+.storyboard-table th,
+.storyboard-table td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.storyboard-table thead th {
+  background: var(--panel-alt);
+  font-size: 0.82rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.storyboard-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.storyboard-table .time-cell {
+  white-space: nowrap;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.storyboard-table .asr-cell {
+  line-height: 1.7;
+  min-width: 220px;
+}
+
+.storyboard-table select,
+.storyboard-table textarea {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: white;
+  font-size: 0.88rem;
+  min-width: 130px;
+}
+
+.storyboard-table textarea {
+  width: 100%;
+  min-width: 260px;
+  line-height: 1.6;
+  resize: vertical;
 }
 
 @media (max-width: 900px) {

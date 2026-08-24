@@ -2,7 +2,7 @@ import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { generateScriptFromBrief } from "./generate.mjs";
+import { generateScript, generateStoryboard } from "./generate.mjs";
 
 const appDirectory = path.dirname(fileURLToPath(import.meta.url));
 
@@ -70,10 +70,10 @@ const server = createServer(async (request, response) => {
     return;
   }
 
-  if (method === "POST" && requestUrl.pathname === "/api/generate") {
+  if (method === "POST" && requestUrl.pathname === "/api/script") {
     try {
       const payload = await readRequestBody(request);
-      const result = await generateScriptFromBrief(payload);
+      const result = await generateScript(payload);
       response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
       response.end(
         JSON.stringify({
@@ -82,22 +82,39 @@ const server = createServer(async (request, response) => {
             brief: result.brief,
             script: result.script,
             summary: result.summary,
-            storyboard: result.storyboard,
-            storyboardMarkdown: result.storyboardMarkdown,
-            releaseDecision: result.evaluation.release_decision,
-            retrieval: result.retrieval,
           },
         }),
       );
       return;
     } catch (error) {
       response.writeHead(400, { "Content-Type": "application/json; charset=utf-8" });
+      response.end(JSON.stringify({ ok: false, error: error.message || "Failed to generate script" }));
+      return;
+    }
+  }
+
+  if (method === "POST" && requestUrl.pathname === "/api/storyboard") {
+    try {
+      const payload = await readRequestBody(request);
+      const result = generateStoryboard(payload.script, {
+        charactersPerSecond: payload.charactersPerSecond,
+        maximumCharacters: payload.maximumCharacters,
+      });
+      response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
       response.end(
         JSON.stringify({
-          ok: false,
-          error: error.message || "Failed to generate script",
+          ok: true,
+          data: {
+            storyboard: result.storyboard,
+            storyboardMarkdown: result.storyboardMarkdown,
+            summary: result.summary,
+          },
         }),
       );
+      return;
+    } catch (error) {
+      response.writeHead(400, { "Content-Type": "application/json; charset=utf-8" });
+      response.end(JSON.stringify({ ok: false, error: error.message || "Failed to generate storyboard" }));
       return;
     }
   }

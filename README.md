@@ -35,9 +35,15 @@ Demo 输出写入 `outputs/demo_001/`，该目录默认不进入 Git。
 npm start
 ```
 
-打开 http://localhost:4173 （可用 `PORT` 环境变量修改端口），在表单中填写标题、脚本类型、受众、目标、确认事实、创作许可、禁止项和交付要求，点击「生成脚本」即可得到脚本正文、分镜概览与结构门禁结果。界面默认使用 Mock Provider，无需 API Key；「填充示例」按钮可一键填入 `examples/demo_001/` 的演示内容。
+打开 http://localhost:4173 （可用 `PORT` 环境变量修改端口）。界面分为三步：
 
-界面由 `app/` 目录承载：静态页面与交互（`index.html`、`styles.css`、`app.js`）、零依赖 Node HTTP 服务（`server.mjs`，暴露 `POST /api/generate` 与 `GET /health`）、以及复用核心管线的生成逻辑（`generate.mjs`）。
+1. **填写需求**：标题、脚本类型、目标受众、核心产品、产品卖点、核心事实、想表达的内容，以及可选的"不能说的内容"。
+2. **校对文案**：先只生成口播文案，可在页面上直接修改，确认后再进入下一步。
+3. **调整分镜**：基于确认后的文案生成分镜表（时间戳、画面类型、画面 Caption），画面类型与 Caption 可直接编辑，语速和每段最大字数可调整后重新切分，支持导出 Markdown。
+
+界面默认使用 Mock Provider，无需 API Key；「填充示例」按钮可一键填入 `examples/demo_001/` 的演示内容。
+
+界面由 `app/` 目录承载：静态页面与交互（`index.html`、`styles.css`、`app.js`）、零依赖 Node HTTP 服务（`server.mjs`，暴露 `POST /api/script`、`POST /api/storyboard` 与 `GET /health`）、以及复用核心管线的生成逻辑（`generate.mjs`）。
 
 ## 真实公开视频 Demo
 

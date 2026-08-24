@@ -1,11 +1,33 @@
 const form = document.getElementById("brief-form");
-const resultPanel = document.getElementById("result-panel");
-const summaryGrid = document.getElementById("summary-grid");
-const scriptOutput = document.getElementById("script-output");
-const storyboardOutput = document.getElementById("storyboard-output");
-const statusTag = document.getElementById("status-tag");
+const scriptPanel = document.getElementById("script-panel");
+const scriptSummary = document.getElementById("script-summary");
+const scriptEditor = document.getElementById("script-editor");
+const scriptStatus = document.getElementById("script-status");
+const regenerateButton = document.getElementById("regenerate-script");
+const confirmButton = document.getElementById("confirm-script");
+const storyboardPanel = document.getElementById("storyboard-panel");
+const storyboardSummary = document.getElementById("storyboard-summary");
+const storyboardBody = document.getElementById("storyboard-body");
+const storyboardStatus = document.getElementById("storyboard-status");
+const rateInput = document.getElementById("opt-rate");
+const maxCharsInput = document.getElementById("opt-max-chars");
+const applyOptionsButton = document.getElementById("apply-options");
+const exportButton = document.getElementById("export-markdown");
 const resetButton = document.getElementById("reset-form");
 const useDemoButton = document.getElementById("use-demo");
+
+const VISUAL_TYPE_OPTIONS = [
+  ["digital_human", "数字人口播"],
+  ["ai_visual", "AI 场景画面"],
+  ["explanatory_graphic", "图解说明"],
+  ["user_asset", "自有素材"],
+];
+
+const state = {
+  payload: null,
+  title: "storyboard",
+  storyboard: null,
+};
 
 function parseMultiline(value) {
   return value
@@ -28,17 +50,13 @@ function buildPayload(formElement) {
   };
 }
 
-function renderSummary(summary) {
-  const items = [
-    ["策略卡", summary.selected_strategy_card_id || "回退模式"],
-    ["分段数", String(summary.segment_count || 0)],
-    ["时长", `${summary.estimated_total_duration_sec || 0} 秒`],
-    ["状态", summary.release_decision || "unknown"],
-    ["阻断检查", summary.blocking_ok ? "通过" : "失败"],
-    ["来源数", String(summary.public_source_count || 0)],
-  ];
+function setStatus(element, stateName, label) {
+  element.className = `status-tag ${stateName || ""}`.trim();
+  element.textContent = label;
+}
 
-  summaryGrid.innerHTML = items
+function renderSummary(container, items) {
+  container.innerHTML = items
     .map(
       ([label, value]) => `
         <div class="summary-item">
@@ -50,48 +68,195 @@ function renderSummary(summary) {
     .join("");
 }
 
-function setStatus(state, label) {
-  statusTag.className = `status-tag ${state || ""}`.trim();
-  statusTag.textContent = label;
+async function postJson(url, body) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const json = await response.json();
+  if (!response.ok || !json.ok) {
+    throw new Error(json.error || "请求失败");
+  }
+  return json.data;
 }
+
+// ---- 第 2 步：文案脚本 ----
 
 async function submitBrief(event) {
   event.preventDefault();
-  const payload = buildPayload(form);
-  setStatus("warning", "生成中");
-  resultPanel.classList.remove("hidden");
+  state.payload = buildPayload(form);
+  state.title = state.payload.title;
+  await requestScript();
+}
+
+async function requestScript() {
+  setStatus(scriptStatus, "warning", "生成中");
+  scriptPanel.classList.remove("hidden");
+  storyboardPanel.classList.add("hidden");
+  scriptPanel.scrollIntoView({ behavior: "smooth", block: "start" });
 
   try {
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const json = await response.json();
-    if (!response.ok || !json.ok) {
-      throw new Error(json.error || "生成失败");
-    }
-
-    const { script, summary, storyboardMarkdown } = json.data;
-    scriptOutput.textContent = script;
-    storyboardOutput.textContent = storyboardMarkdown || JSON.stringify(storyboardMarkdown || "", null, 2);
-    renderSummary(summary);
-    setStatus(summary.blocking_ok ? "success" : "warning", summary.release_decision || "已生成");
+    const data = await postJson("/api/script", state.payload);
+    scriptEditor.value = data.script;
+    renderSummary(scriptSummary, [
+      ["命中策略", data.summary.selected_strategy_card_id || "回退模式"],
+      ["文案字数", `${data.summary.script_characters} 字`],
+      ["预计语速", "约 6 字/秒"],
+    ]);
+    setStatus(scriptStatus, "", "待确认");
   } catch (error) {
-    scriptOutput.textContent = `生成失败：${error.message}`;
-    storyboardOutput.textContent = "请检查表单字段或后端服务状态。";
-    renderSummary({
-      selected_strategy_card_id: "error",
-      segment_count: 0,
-      estimated_total_duration_sec: 0,
-      release_decision: "error",
-      blocking_ok: false,
-      public_source_count: 0,
-    });
-    setStatus("warning", "失败");
+    scriptEditor.value = "";
+    renderSummary(scriptSummary, [["错误", error.message]]);
+    setStatus(scriptStatus, "warning", "生成失败");
   }
 }
+
+// ---- 第 3 步：分镜脚本 ----
+
+async function requestStoryboard() {
+  const script = scriptEditor.value.trim();
+  if (!script) {
+    setStatus(scriptStatus, "warning", "文案不能为空");
+    return;
+  }
+  setStatus(storyboardStatus, "warning", "生成中");
+  storyboardPanel.classList.remove("hidden");
+  storyboardPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  try {
+    const data = await postJson("/api/storyboard", {
+      script,
+      charactersPerSecond: Number(rateInput.value),
+      maximumCharacters: Number(maxCharsInput.value),
+    });
+    state.storyboard = data.storyboard;
+    renderStoryboardSummary(data.summary);
+    renderStoryboardTable();
+    setStatus(
+      storyboardStatus,
+      data.summary.blocking_ok ? "success" : "warning",
+      data.summary.blocking_ok ? "结构校验通过" : "结构校验未通过",
+    );
+  } catch (error) {
+    state.storyboard = null;
+    storyboardBody.innerHTML = "";
+    renderSummary(storyboardSummary, [["错误", error.message]]);
+    setStatus(storyboardStatus, "warning", "生成失败");
+  }
+}
+
+function renderStoryboardSummary(summary) {
+  renderSummary(storyboardSummary, [
+    ["分段数", String(summary.segment_count ?? 0)],
+    ["预计总时长", `${summary.estimated_total_duration_sec ?? 0} 秒`],
+    ["结构门禁", summary.blocking_ok ? "通过" : "未通过"],
+    ["提醒", `${summary.warning_count ?? 0} 条`],
+  ]);
+}
+
+function visualTypeLabel(value) {
+  return VISUAL_TYPE_OPTIONS.find(([key]) => key === value)?.[1] || value;
+}
+
+function renderStoryboardTable() {
+  const segments = state.storyboard?.segments || [];
+  storyboardBody.innerHTML = "";
+
+  segments.forEach((segment, index) => {
+    const row = document.createElement("tr");
+
+    const idCell = document.createElement("td");
+    idCell.textContent = segment.segment_id;
+    row.appendChild(idCell);
+
+    const timeCell = document.createElement("td");
+    timeCell.className = "time-cell";
+    timeCell.textContent = `${segment.start_sec}s – ${segment.end_sec}s`;
+    row.appendChild(timeCell);
+
+    const asrCell = document.createElement("td");
+    asrCell.className = "asr-cell";
+    asrCell.textContent = segment.asr_text;
+    row.appendChild(asrCell);
+
+    const typeCell = document.createElement("td");
+    const select = document.createElement("select");
+    for (const [value, label] of VISUAL_TYPE_OPTIONS) {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      select.appendChild(option);
+    }
+    select.value = segment.visual_type;
+    select.addEventListener("change", () => {
+      segment.visual_type = select.value;
+      markAdjusted();
+    });
+    typeCell.appendChild(select);
+    row.appendChild(typeCell);
+
+    const captionCell = document.createElement("td");
+    const captionInput = document.createElement("textarea");
+    captionInput.rows = 2;
+    captionInput.value = segment.caption;
+    captionInput.addEventListener("input", () => {
+      segment.caption = captionInput.value;
+      markAdjusted();
+    });
+    captionCell.appendChild(captionInput);
+    row.appendChild(captionCell);
+
+    storyboardBody.appendChild(row);
+  });
+}
+
+function markAdjusted() {
+  const hasEmptyCaption = (state.storyboard?.segments || []).some(
+    (segment) => !segment.caption.trim(),
+  );
+  if (hasEmptyCaption) {
+    setStatus(storyboardStatus, "warning", "已调整 · 存在空 Caption");
+  } else {
+    setStatus(storyboardStatus, "success", "已手动调整");
+  }
+}
+
+// ---- Markdown 导出 ----
+
+function markdownCell(value) {
+  return String(value ?? "").replace(/\|/g, "\\|").replace(/\r?\n/g, "<br>");
+}
+
+function buildMarkdown() {
+  const storyboard = state.storyboard;
+  const lines = [
+    `# ${state.title} · 分镜脚本`,
+    "",
+    `- 预估总时长：${storyboard.estimated_total_duration_sec} 秒`,
+    "",
+    "| 段落 | 时间戳 | 口播内容 | 画面类型 | 画面 Caption |",
+    "| --- | --- | --- | --- | --- |",
+  ];
+  for (const segment of storyboard.segments) {
+    lines.push(
+      `| ${markdownCell(segment.segment_id)} | ${segment.start_sec}–${segment.end_sec}s | ${markdownCell(segment.asr_text)} | ${markdownCell(visualTypeLabel(segment.visual_type))} | ${markdownCell(segment.caption)} |`,
+    );
+  }
+  return `${lines.join("\n")}\n`;
+}
+
+function exportMarkdown() {
+  if (!state.storyboard) return;
+  const blob = new Blob([buildMarkdown()], { type: "text/markdown; charset=utf-8" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `${state.title || "storyboard"}-分镜.md`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+// ---- 表单辅助 ----
 
 function fillDemo() {
   form.title.value = "AI 工作流入门";
@@ -106,14 +271,21 @@ function fillDemo() {
 
 function resetForm() {
   form.reset();
-  scriptOutput.textContent = "";
-  storyboardOutput.textContent = "";
-  summaryGrid.innerHTML = "";
-  resultPanel.classList.add("hidden");
-  setStatus("", "生成中");
+  state.payload = null;
+  state.storyboard = null;
+  scriptEditor.value = "";
+  scriptSummary.innerHTML = "";
+  storyboardSummary.innerHTML = "";
+  storyboardBody.innerHTML = "";
+  scriptPanel.classList.add("hidden");
+  storyboardPanel.classList.add("hidden");
 }
 
 form.addEventListener("submit", submitBrief);
+regenerateButton.addEventListener("click", requestScript);
+confirmButton.addEventListener("click", requestStoryboard);
+applyOptionsButton.addEventListener("click", requestStoryboard);
+exportButton.addEventListener("click", exportMarkdown);
 resetButton.addEventListener("click", resetForm);
 useDemoButton.addEventListener("click", fillDemo);
 fillDemo();

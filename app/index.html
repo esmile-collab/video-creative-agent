@@ -30,7 +30,7 @@
       <main class="main-panel">
         <header class="topbar">
           <div>
-            <p class="eyebrow">公开版演示</p>
+            <p class="eyebrow">第 1 步 · 填写需求</p>
             <h2>脚本生成</h2>
           </div>
           <button id="use-demo" class="secondary-button" type="button">填充示例</button>
@@ -86,30 +86,66 @@
           </label>
 
           <div class="actions">
-            <button type="submit" class="primary-button">生成脚本</button>
+            <button type="submit" class="primary-button">生成文案脚本</button>
             <button type="button" class="ghost-button" id="reset-form">清空</button>
           </div>
         </form>
 
-        <section id="result-panel" class="result-panel hidden">
+        <section id="script-panel" class="result-panel hidden">
           <div class="result-header">
             <div>
-              <p class="eyebrow">生成结果</p>
-              <h3>脚本与分镜</h3>
+              <p class="eyebrow">第 2 步 · 校对文案</p>
+              <h3>文案脚本</h3>
             </div>
-            <div id="status-tag" class="status-tag">生成中</div>
+            <div id="script-status" class="status-tag">待确认</div>
+          </div>
+          <p class="panel-desc">这是人物在视频里口播的内容。可以直接在下方修改，确认无误后再进入分镜。</p>
+          <div class="summary-grid" id="script-summary"></div>
+          <textarea id="script-editor" class="script-editor" rows="12" spellcheck="false"></textarea>
+          <div class="actions">
+            <button id="regenerate-script" class="secondary-button" type="button">重新生成</button>
+            <button id="confirm-script" class="primary-button" type="button">确认文案，生成分镜 →</button>
+          </div>
+        </section>
+
+        <section id="storyboard-panel" class="result-panel hidden">
+          <div class="result-header">
+            <div>
+              <p class="eyebrow">第 3 步 · 调整分镜</p>
+              <h3>分镜脚本</h3>
+            </div>
+            <div id="storyboard-status" class="status-tag">已生成</div>
+          </div>
+          <p class="panel-desc">每一段的画面类型和画面描述都可以直接修改；调整语速或段落长度后可重新切分。</p>
+
+          <div class="storyboard-controls">
+            <label>
+              <span>语速（字/秒）</span>
+              <input id="opt-rate" type="number" step="0.1" min="3" max="10" value="5.97" />
+            </label>
+            <label>
+              <span>每段最大字数</span>
+              <input id="opt-max-chars" type="number" step="1" min="10" max="120" value="42" />
+            </label>
+            <button id="apply-options" class="secondary-button" type="button">重新切分</button>
+            <button id="export-markdown" class="ghost-button" type="button">导出 Markdown</button>
           </div>
 
-          <div class="summary-grid" id="summary-grid"></div>
+          <div class="summary-grid" id="storyboard-summary"></div>
 
-          <div class="output-card">
-            <h4>脚本正文</h4>
-            <pre id="script-output"></pre>
-          </div>
-
-          <div class="output-card">
-            <h4>分镜概览</h4>
-            <pre id="storyboard-output"></pre>
+          <div class="storyboard-table-wrap">
+            <table class="storyboard-table">
+              <thead>
+                <tr>
+                  <th>段落</th>
+                  <th>时间戳</th>
+                  <th>口播内容</th>
+                  <th>画面类型</th>
+                  <th>画面 Caption</th>
+                </tr>
+              </thead>
+              <tbody id="storyboard-body"></tbody>
+            </table>
           </div>
         </section>
       </main>

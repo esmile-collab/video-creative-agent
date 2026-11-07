@@ -6,7 +6,7 @@ An open engineering baseline for Chinese talking-head video content: it compiles
 
 ## Architecture
 
-![System architecture: module responsibilities, interfaces, and feedback](docs/architecture.en.svg)
+![System architecture: module collaboration and feedback](docs/architecture.en.svg)
 
 [Diagram sources, implementation boundaries, and maintenance](docs/architecture.md) (Chinese)
 

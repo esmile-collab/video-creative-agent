@@ -1,70 +1,96 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="912" viewBox="0 0 960 912" role="img" aria-labelledby="title desc" lang="zh">
-<title id="title">视频创意 Agent：系统架构与反馈闭环</title>
-<desc id="desc">从策略到分镜，把评测问题带回下一次修改。简报与策略输入：Brief · 策略卡 · 事实；策略召回与编译：硬过滤 · Top-1 召回；脚本与分镜：确认脚本 → 分镜规划；结构校验与评测：口播 · 时序 · 画面字段；评测问题留痕：阻断项 · 警告 · 摘要；人工纠错与重跑：修改脚本或分镜规则；可复用输入与回归用例：策略卡 · 确认脚本 · tests/；分镜与审阅材料：JSON / Markdown。默认 Demo 使用 Mock；兼容模型适配器需显式接入。 当前公开代码覆盖脚本与分镜；自动纠错和成片合成尚未接入。</desc>
-<metadata>Source revision: 1745780f4b8ecce6a9925619854378160587a033. Editable source: this SVG. Evidence and maintenance: docs/architecture.md.</metadata>
-<defs><marker id="gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 1 L 9 5 L 0 9" fill="none" stroke="#64748b" stroke-width="1.8"/></marker><marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 1 L 9 5 L 0 9" fill="none" stroke="#2563eb" stroke-width="1.8"/></marker></defs>
-<rect width="960" height="912" fill="#f8fafc"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="980" viewBox="0 0 960 980" role="img" aria-labelledby="title desc" lang="zh">
+<title id="title">视频创意 · 模块协作</title><desc id="desc">编排传递输入输出，策略、适配、分镜与评测各司其职</desc>
+<metadata>Module collaboration diagram. Source revision: cb61aec8698b01c652a3ed7de6c000977ffa24b8. Editable source: this SVG. Evidence: docs/architecture.md.</metadata>
+<defs>
+<marker id="gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9" fill="none" stroke="#64748b" stroke-width="1.8"/></marker>
+<marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9" fill="none" stroke="#2563eb" stroke-width="1.8"/></marker>
+</defs>
+<rect width="960" height="980" fill="#f8fafc"/>
 <g font-family="system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Microsoft YaHei, sans-serif">
-<text x="48" y="58" font-size="40" fill="#172033" text-anchor="start" font-weight="600">视频创意 Agent</text>
-<text x="48" y="102" font-size="24" fill="#475569" text-anchor="start" font-weight="400">从策略到分镜，把评测问题带回下一次修改</text>
-<text x="48" y="148" font-size="20" fill="#526174" text-anchor="start" font-weight="400">执行与上下文</text>
-<path d="M 288 232 H 354" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#gray)"/>
-<path d="M 600 232 H 666" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#gray)"/>
-<path d="M 792 292 V 414" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#gray)"/>
-<path d="M 672 480 H 606" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#blue)"/>
-<path d="M 360 480 H 294" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#blue)" stroke-dasharray="8 6"/>
-<path d="M 168 420 V 342 H 480 V 298" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#blue)" stroke-dasharray="8 6"/>
-<text x="324" y="329" font-size="20" fill="#2563eb" text-anchor="start" font-weight="400">人工修订后重跑</text>
-<path d="M 792 540 V 676" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#gray)"/>
-<text x="807" y="610" font-size="19" fill="#526174" text-anchor="start" font-weight="400">结构通过</text>
-<path d="M 480 540 V 676" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#blue)"/>
-<text x="495" y="609" font-size="19" fill="#2563eb" text-anchor="start" font-weight="400">保留报告与输入</text>
-<path d="M 168 682 V 546" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#blue)" stroke-dasharray="8 6"/>
-<text x="183" y="609" font-size="19" fill="#2563eb" text-anchor="start" font-weight="400">人工复用与回归</text>
-<g><rect x="48" y="172" width="240" height="120" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-<text x="168.0" y="210" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">简报与策略输入</text>
-<text x="168.0" y="244" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">Brief · 策略卡 · 事实</text>
-<text x="168.0" y="273" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">examples/ / contracts/</text>
+<text x="48" y="58" font-size="40" fill="#172033" text-anchor="start" font-weight="600">视频创意 · 模块协作</text>
+<text x="48" y="102" font-size="24" fill="#475569" text-anchor="start" font-weight="400">编排传递输入输出，策略、适配、分镜与评测各司其职</text>
+<path d="M 600 218 H 666" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linejoin="round"/>
+<path d="M 600 218 H 666" fill="none" stroke="#64748b" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#gray)"/>
+<path d="M 168 276 V 426" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linejoin="round"/>
+<path d="M 168 276 V 426" fill="none" stroke="#64748b" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#gray)" marker-start="url(#gray)"/>
+<path d="M 480 276 V 426" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linejoin="round"/>
+<path d="M 480 276 V 426" fill="none" stroke="#64748b" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#gray)" marker-start="url(#gray)"/>
+<path d="M 552 276 V 350 H 792 V 426" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linejoin="round"/>
+<path d="M 552 276 V 350 H 792 V 426" fill="none" stroke="#64748b" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#gray)" marker-start="url(#gray)"/>
+<path d="M 372 282 V 316 H 324 V 664 H 480 V 718" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linejoin="round"/>
+<path d="M 372 282 V 316 H 324 V 664 H 480 V 718" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#blue)" marker-start="url(#blue)"/>
+<path d="M 528 724 V 620 H 792 V 554" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linejoin="round"/>
+<path d="M 528 724 V 620 H 792 V 554" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#blue)"/>
+<path d="M 672 782 H 606" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linejoin="round"/>
+<path d="M 672 782 H 606" fill="none" stroke="#64748b" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#gray)"/>
+<path d="M 48 218 H 24 V 782 H 42" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linejoin="round"/>
+<path d="M 48 218 H 24 V 782 H 42" fill="none" stroke="#64748b" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#gray)"/>
+<path d="M 168 840 V 886 H 936 V 218 H 918" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linejoin="round"/>
+<path d="M 168 840 V 886 H 936 V 218 H 918" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 6" marker-end="url(#blue)"/>
+<g class="module" data-module="运行编排"><rect x="48" y="160" width="552" height="116" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="324.0" y="195" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">运行编排</text>
+<text x="324.0" y="230" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">读取输入 · 调用模块 · 归档结果</text>
+<text x="324.0" y="258" font-size="18" fill="#526174" text-anchor="middle" font-weight="400">scripts/run-demo.mjs</text>
 </g>
-<g><rect x="360" y="172" width="240" height="120" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-<text x="480.0" y="210" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">策略召回与编译</text>
-<text x="480.0" y="244" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">硬过滤 · Top-1 召回</text>
-<text x="480.0" y="273" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">core/strategy/</text>
+<g class="module" data-module="输入与契约"><rect x="672" y="160" width="240" height="116" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="792.0" y="195" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">输入与契约</text>
+<text x="792.0" y="230" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">简报 · 策略卡 · 约束</text>
+<text x="792.0" y="258" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">examples/ / contracts/</text>
 </g>
-<g><rect x="672" y="172" width="240" height="120" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-<text x="792.0" y="210" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">脚本与分镜</text>
-<text x="792.0" y="244" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">确认脚本 → 分镜规划</text>
-<text x="792.0" y="273" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">providers/ / storyboard/</text>
+<g class="module" data-module="策略与编译"><rect x="48" y="432" width="240" height="116" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="168.0" y="467" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">策略与编译</text>
+<text x="168.0" y="502" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">策略召回 · 请求编译</text>
+<text x="168.0" y="530" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">Brief / 策略卡 → 请求</text>
 </g>
-<g><rect x="672" y="420" width="240" height="120" rx="12" fill="#eff6ff" stroke="#b7cdf8"/>
-<text x="792.0" y="458" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">结构校验与评测</text>
-<text x="792.0" y="492" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">口播 · 时序 · 画面字段</text>
-<text x="792.0" y="521" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">core/evaluation/</text>
+<g class="module" data-module="模型适配"><rect x="360" y="432" width="240" height="116" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="480.0" y="467" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">模型适配</text>
+<text x="480.0" y="502" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">请求 → 脚本文本</text>
+<text x="480.0" y="530" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">Mock / 兼容协议</text>
 </g>
-<g><rect x="360" y="420" width="240" height="120" rx="12" fill="#eff6ff" stroke="#b7cdf8"/>
-<text x="480.0" y="458" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">评测问题留痕</text>
-<text x="480.0" y="492" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">阻断项 · 警告 · 摘要</text>
-<text x="480.0" y="521" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">validation_report.json</text>
+<g class="module" data-module="分镜引擎"><rect x="672" y="432" width="240" height="116" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="792.0" y="467" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">分镜引擎</text>
+<text x="792.0" y="502" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">脚本 → 分镜与校验</text>
+<text x="792.0" y="530" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">切分 · 时长 · 画面</text>
 </g>
-<g><rect x="48" y="420" width="240" height="120" rx="12" fill="#eff6ff" stroke="#b7cdf8"/>
-<text x="168.0" y="458" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">人工纠错与重跑</text>
-<text x="168.0" y="492" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">修改脚本或分镜规则</text>
-<text x="168.0" y="521" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">修订输入 / 规则 → 再运行</text>
+<g class="module" data-module="运行产物"><rect x="48" y="724" width="240" height="116" rx="10" fill="#eff6ff" stroke="#b7cdf8"/>
+<text x="168.0" y="759" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">运行产物</text>
+<text x="168.0" y="794" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">请求 · 脚本 · 分镜</text>
+<text x="168.0" y="822" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">报告 / 运行摘要</text>
 </g>
-<g><rect x="48" y="682" width="552" height="120" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-<text x="324.0" y="720" font-size="30" fill="#172033" text-anchor="middle" font-weight="600">可复用输入与回归用例</text>
-<text x="324.0" y="754" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">策略卡 · 确认脚本 · tests/</text>
-<text x="324.0" y="783" font-size="19" fill="#526174" text-anchor="middle" font-weight="400">问题复现后，由维护者补充样例与回归测试</text>
+<g class="module" data-module="分镜评测"><rect x="360" y="724" width="240" height="116" rx="10" fill="#eff6ff" stroke="#b7cdf8"/>
+<text x="480.0" y="759" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">分镜评测</text>
+<text x="480.0" y="794" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">结构检查 · 切点评分</text>
+<text x="480.0" y="822" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">分镜 + 原脚本 → 报告</text>
 </g>
-<g><rect x="672" y="682" width="240" height="120" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-<text x="792.0" y="720" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">分镜与审阅材料</text>
-<text x="792.0" y="754" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">JSON / Markdown</text>
-<text x="792.0" y="783" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">结构通过后仍需人工审阅</text>
+<g class="module" data-module="回归用例"><rect x="672" y="724" width="240" height="116" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+<text x="792.0" y="759" font-size="32" fill="#172033" text-anchor="middle" font-weight="600">回归用例</text>
+<text x="792.0" y="794" font-size="22" fill="#334155" text-anchor="middle" font-weight="400">复现样例 · 行为断言</text>
+<text x="792.0" y="822" font-size="16" fill="#526174" text-anchor="middle" font-weight="400">tests/ / examples/</text>
 </g>
-<line x1="48" y1="840" x2="94" y2="840" stroke="#64748b" stroke-width="2.5"/>
-<text x="108" y="846" font-size="18" fill="#475569" text-anchor="start" font-weight="400">已有代码 / Skill 流程</text>
-<line x1="410" y1="840" x2="456" y2="840" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="8 6"/>
-<text x="470" y="846" font-size="18" fill="#475569" text-anchor="start" font-weight="400">人工处理 / 再次发起</text>
-<text x="48" y="875" font-size="20" fill="#475569" text-anchor="start" font-weight="400">默认 Demo 使用 Mock；兼容模型适配器需显式接入。</text>
-<text x="48" y="900" font-size="20" fill="#475569" text-anchor="start" font-weight="400">当前公开代码覆盖脚本与分镜；自动纠错和成片合成尚未接入。</text>
+<g class="edge-label">
+<text x="636" y="202" font-size="16" text-anchor="middle" fill="#475569" stroke="#f8fafc" stroke-width="7" stroke-linejoin="round" paint-order="stroke fill">读输入</text></g>
+<g class="edge-label">
+<text x="168" y="356" font-size="18" text-anchor="middle" fill="#475569" stroke="#f8fafc" stroke-width="7" stroke-linejoin="round" paint-order="stroke fill">简报 / 策略</text></g>
+<g class="edge-label">
+<text x="480" y="356" font-size="18" text-anchor="middle" fill="#475569" stroke="#f8fafc" stroke-width="7" stroke-linejoin="round" paint-order="stroke fill">脚本请求</text></g>
+<g class="edge-label">
+<text x="699" y="338" font-size="18" text-anchor="middle" fill="#475569" stroke="#f8fafc" stroke-width="7" stroke-linejoin="round" paint-order="stroke fill">确认脚本</text></g>
+<g class="edge-label">
+<text x="412" y="650" font-size="18" text-anchor="middle" fill="#2563eb" stroke="#f8fafc" stroke-width="7" stroke-linejoin="round" paint-order="stroke fill">评测输入 / 报告</text></g>
+<g class="edge-label">
+<text x="660" y="608" font-size="18" text-anchor="middle" fill="#2563eb" stroke="#f8fafc" stroke-width="7" stroke-linejoin="round" paint-order="stroke fill">复用结构校验</text></g>
+<g class="edge-label">
+<text x="636" y="766" font-size="16" text-anchor="middle" fill="#475569" stroke="#f8fafc" stroke-width="7" stroke-linejoin="round" paint-order="stroke fill">断言</text></g>
+<g class="edge-label">
+<text x="100" y="646" font-size="18" text-anchor="middle" fill="#475569" stroke="#f8fafc" stroke-width="7" stroke-linejoin="round" paint-order="stroke fill">编排归档</text></g>
+<g class="edge-label">
+<text x="480" y="875" font-size="18" text-anchor="middle" fill="#2563eb" stroke="#f8fafc" stroke-width="7" stroke-linejoin="round" paint-order="stroke fill">复核报告，修订输入与规则后重跑</text></g>
+<line x1="48" y1="898" x2="84" y2="898" stroke="#64748b" stroke-width="2.3"/>
+<text x="96" y="904" font-size="18" fill="#475569" text-anchor="start" font-weight="400">调用 / 数据</text>
+<line x1="333" y1="898" x2="369" y2="898" stroke="#2563eb" stroke-width="2.3"/>
+<text x="381" y="904" font-size="18" fill="#475569" text-anchor="start" font-weight="400">评测 / 回读</text>
+<line x1="638" y1="898" x2="674" y2="898" stroke="#2563eb" stroke-width="2.3" stroke-dasharray="7 6"/>
+<text x="686" y="904" font-size="18" fill="#475569" text-anchor="start" font-weight="400">人工修订</text>
+<text x="48" y="932" font-size="20" fill="#475569" text-anchor="start" font-weight="400">默认 Demo 使用 Mock；兼容模型适配器需显式接入。</text>
+<text x="48" y="959" font-size="20" fill="#475569" text-anchor="start" font-weight="400">评测复用分镜校验；问题修复与用例更新由维护者完成。</text>
 </g></svg>

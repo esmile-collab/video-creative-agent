@@ -6,10 +6,9 @@ An open engineering baseline for Chinese talking-head video content: it compiles
 
 ## Architecture
 
-![System architecture: execution, evaluation, recorded findings, and revision loops](docs/architecture.en.svg)
+![System architecture: module responsibilities, interfaces, and feedback](docs/architecture.en.svg)
 
 [Diagram sources, implementation boundaries, and maintenance](docs/architecture.md) (Chinese)
-
 
 ## Output Showcase
 

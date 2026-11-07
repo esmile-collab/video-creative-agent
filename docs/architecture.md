@@ -1,29 +1,26 @@
-# 视频创意 Agent：架构图依据与维护
+# 模块协作架构：依据与维护
 
-核对日期：2026-11-07。代码 / 文档基线：`1745780f4b8ecce6a9925619854378160587a033`。
+核对日期：2026-11-07。代码 / 文档基线：`cb61aec8698b01c652a3ed7de6c000977ffa24b8`。
 
-## 图源
+## 图源与读法
 
-`architecture.svg` 是可编辑图源，README 直接展示。图中没有脚本、动画、外部字体或图片依赖。
-实线表示已有代码关系或仓库规定的 Skill 流程；虚线表示人工处理、人工维护或下一次发起。蓝色突出评测问题和反馈回路。
+`architecture.svg` 是可编辑图源，README 直接展示；英文版本存在时同步维护。图片无动画、脚本、外部字体或图片依赖。
+块表示可定位的代码职责、Skill、文档或数据资源；块内只保留模块名、职责或接口。连线标注传递的数据或调用内容，双向箭头表示调用 / 读取与结果返回。蓝线突出评测与回读，虚线仅表示人工修订。
+图按当前实现分组，不据此宣称所有模块已完全解耦。现有依赖与直接访问路径保留在图和下表中。
 
-## 模块与证据
+## 模块与协作依据
 
-| 图中关系 | 对应文件 | 已核对的范围 |
+| 模块 | 对应文件 | 接口与边界 |
 | --- | --- | --- |
-| 策略、脚本、分镜与报告输出 | [scripts/run-demo.mjs](../scripts/run-demo.mjs) | Demo 为单次执行，默认 Mock；会写出分镜、校验报告和运行摘要。 |
-| 分镜规划与结构校验 | [core/storyboard/pipeline.mjs](../core/storyboard/pipeline.mjs) | 检查口播保留、连续时间、画面类型与描述；结构通过仍需人工审阅。 |
-| 评测决策 | [core/evaluation/storyboard-eval.mjs](../core/evaluation/storyboard-eval.mjs) | 返回 blocked 或 human_review_required；有参考切点时才计算边界指标。 |
-| 回归验证 | [tests/evaluation.test.mjs](../tests/evaluation.test.mjs) | 已有切点评测测试；问题转成新样例、修改规则和重跑均由维护者操作。 |
-
-## 当前边界
-
-- 默认 Demo 使用 Mock；兼容模型适配器需显式接入。
-- 当前公开代码覆盖脚本与分镜；自动纠错和成片合成尚未接入。
-- Demo 即使评测阻断也会保留文件与报告；图中的交付分支表示结构通过后的审阅材料，不代表代码在文件导出前实施阻断。
-- 回归用例由维护者在复现问题后补充；当前没有自动把评测问题写回策略卡、脚本或测试。
+| 运行编排 | [scripts/run-demo.mjs](../scripts/run-demo.mjs) | 读取输入，依次调用策略、Provider、分镜与评测函数；由编排层归档请求、脚本、分镜和报告。各能力通过返回值交换数据。 |
+| 策略与编译 | [core/strategy/compiler.mjs](../core/strategy/compiler.mjs) | retriever 先返回策略选择结果；compiler 结合 Brief、基础规则与输出约束生成 compiledRequest，不直接调用模型。 |
+| 模型适配 | [core/providers/openai-compatible.mjs](../core/providers/openai-compatible.mjs) | generateScript(compiledRequest) 返回 content / usage；默认 Demo 显式创建 Mock，兼容适配器需要显式接入。 |
+| 分镜引擎 | [core/storyboard/pipeline.mjs](../core/storyboard/pipeline.mjs) | buildStoryboard(approvedScript) 返回 storyboard / validation；负责切分、时间预算、画面规划和结构校验。 |
+| 分镜评测 | [core/evaluation/storyboard-eval.mjs](../core/evaluation/storyboard-eval.mjs) | evaluateStoryboard 接收分镜、原脚本和可选参考切点；复用分镜模块的 validateStoryboard，返回评测报告。保留这一已有依赖。 |
+| 回归用例 | [tests/evaluation.test.mjs](../tests/evaluation.test.mjs) | 用例调用评测能力并断言结果。报告中的问题由维护者复现后，修改输入、规则或用例并重跑。 |
 
 ## 随代码维护
 
-输入输出、模块调用、评测门槛、记录位置或反馈路径变化时，在同一提交内更新 SVG、对应 README 与本文件。人工环节保留虚线；只有代码已经实现自动执行后才改为实线。
-直接编辑 SVG 中的文字、节点与路径，保持全部信息默认可见。英文图存在时同步更新。提交前检查 XML 能解析、文字与箭头不重叠、README 图片路径有效，且图中每条回流都有代码或现有流程依据。
+模块职责、调用方、输入输出、共享校验、持久化或回流方式变化时，在同一提交中更新 SVG、README 和本文。不要将人工操作写成自动模块，也不要删除仍然存在的耦合关系。
+图中文字采用短名词和短职责；具体路径与限制留在本文。连线优先写接口内容，例如脚本请求、分镜、快照和运行记录。
+提交前检查 XML 解析、文字边界、连线与节点、README 引用以及静态资源大小。代码行为没有变化时无需为图增加运行依赖。

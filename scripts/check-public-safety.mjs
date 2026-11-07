@@ -5,6 +5,15 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const defaultRoot = path.resolve(scriptDirectory, "..");
 const excludedDirectories = new Set([".git", "node_modules", "outputs", "coverage", "dist"]);
+// Product-demo outputs explicitly supplied for the public showcase.
+const approvedShowcaseMedia = new Set([
+  "showcase/media/script-assembly.mp4",
+  "showcase/media/script-assembly.jpg",
+  "showcase/media/script-assembly-preview.gif",
+  "showcase/media/reference-remix.mp4",
+  "showcase/media/reference-remix.jpg",
+  "showcase/media/reference-remix-preview.gif",
+]);
 const forbiddenSuffixes = [
   ".mp4",
   ".webm",
@@ -89,6 +98,10 @@ export async function scanRepo(rootDirectory = defaultRoot) {
       continue;
     }
     if (forbiddenSuffixes.some((suffix) => lowerPath.endsWith(suffix))) {
+      if (approvedShowcaseMedia.has(relativePath) && info.size <= 25 * 1024 * 1024) {
+        scannedFiles += 1;
+        continue;
+      }
       violations.push({ file: relativePath, code: "forbidden_binary_or_media" });
       continue;
     }

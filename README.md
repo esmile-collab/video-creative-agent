@@ -4,6 +4,17 @@
 
 一个面向中文口播内容的公开工程基线：把 Brief（任务简报）编译成有事实边界的脚本请求，再把确认脚本转换成可审阅、可校验、可导出的分镜。
 
+## 成果展示
+
+下面是产品 Demo 跑出的两条广告成片。点击动态预览可查看完整视频。
+
+| 脚本 → 组装 | 爆款参考 → 裂变混剪 |
+| --- | --- |
+| [![日化产品讲解 · 10 秒预览](showcase/media/script-assembly-preview.gif)](https://github.com/esmile-collab/video-creative-agent/blob/main/showcase/media/script-assembly.mp4) | [![游戏开发课程 · 10 秒预览](showcase/media/reference-remix-preview.gif)](https://github.com/esmile-collab/video-creative-agent/blob/main/showcase/media/reference-remix.mp4) |
+| 日化 · 产品讲解 · 完整成片约 60 秒 | 教育 · 游戏开发课程 · 完整成片约 95 秒 |
+
+公开代码当前覆盖脚本与分镜工作流，以上成片用于展示产品 Demo 的生成效果。更多行业、体裁和策略的样例统一收录到 [成果样例库](showcase/README.md)。
+
 ## 当前闭环
 
 ```text
@@ -31,11 +42,11 @@ npm run safety
 
 Demo 输出写入 `outputs/demo_001/`，该目录默认不进入 Git。
 
-## 真实公开视频 Demo
+## 外部参考视频
 
 `examples/demo_001/public-sources.json` 保存三个 C 端可访问的视频 URL（链接）、视频 ID 和标题，用于说明策略来源与外部参考关系。
 
-仓库不再分发视频二进制、完整字幕或抽帧。公开视频的展示与播放由来源页面承接。若项目所有者取得明确再分发许可，可在自己的部署中把媒体接入对象存储。
+外部参考视频只保留来源链接，不在本仓库分发其视频二进制、完整字幕或抽帧。上方成果展示收录的是项目所有者本次提供并指定公开的产品 Demo 成片。
 
 ## 核心目录
 
